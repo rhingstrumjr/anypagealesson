@@ -1,0 +1,80 @@
+I need to explain the structure for the data and data types.
+I will use the following template to describe the different data types.
+
+TYPE
+  Description
+
+  { model }
+
+------------------
+QUESTION
+  This will identify the type of question, points, websites used on, and correct answer if it has one.
+
+  { 
+    _id : Num, (gets made by MongoDb)
+    text : Str,
+    type : Str, (Multiple choice, short answer, paragraph, comment, put-in-order, scales (ex - 1-5), graph (future release))
+    answers : [ {
+      answer : Str || Num,
+      isCorrect: Bool,
+      image : Str?
+      }],
+    points : Num,
+    image: Str??,
+    websitesUsedOn : [Str],
+    isPublic: Bool
+  }
+
+---
+
+QUESTION_SETS
+  This will keep track of the various websites and associated questions.
+
+  {
+    _id: Str,
+    title: Str,
+    websitesUsedOn: [Str],
+  }
+
+---
+
+USER
+  This will define the basic information for the user profile.
+
+  { 
+    _id: Num,
+    username: Str,    // need to trim when created
+    password: Str,
+    email: Str,
+    tokens: [Str],
+    info: {
+      firstName: Str,
+      lastName: Str,
+      birthday: Str,
+    },
+    createdQuestionSets: [Str = set IDs],
+    answeredQuestionSets: [
+                            { questionSetID : Str,
+                              selectedAnswers : [Str],
+                              feedback: [{
+                                questionID : Str,
+                                text: Str
+                              }]
+                          }]
+  }
+
+CLASS
+  This will organize groups of students and teachers
+
+  {
+    title: Str,
+    description: Str,
+    QuestionSetsAssigned: [ { questionSet: _id, 
+                              assignedDate: Date,
+                              dueDate: Date}],
+    admin: [user _ids],
+    students: [{_id: user _ids, hasJoined: Boolean }],
+    _id: Object_Id,
+    createdAt: Timestamp
+  }
+
